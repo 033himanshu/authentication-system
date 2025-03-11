@@ -1,0 +1,19 @@
+{
+  "name": "authenticationsystemwithmongodb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/033himanshu/authentication-system.git"
+  },
+  "author": "himanshu upadhyay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/033himanshu/authentication-system/issues"
+  },
+  "homepage": "https://github.com/033himanshu/authentication-system#readme",
+  "description": ""
+}
