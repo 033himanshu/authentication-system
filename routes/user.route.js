@@ -12,7 +12,8 @@ import {
     resetPassword,
     deleteAccount,
     deleteProfilePicture,
-    me
+    me,
+    refreshAccessToken,
 } from "../controllers/user.controller.js"
 
 import multer from "multer"
@@ -26,6 +27,7 @@ router.route('/register').post(register)
 router.get('/verify/:email-:token', verifyEmail)
 router.post('/login', login)
 router.post('/resend-email', resendEmailVerification)
+router.post('/refresh-access-token', refreshAccessToken)
 //secured routes
 router.use(verifyJWT)
 router.get('/me', me)

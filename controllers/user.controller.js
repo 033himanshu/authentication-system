@@ -3,6 +3,7 @@ import {success} from "../utils/response.js"
 import User from "../models/user.model.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
+import jwt from "jsonwebtoken"
 import { destroyOnCloudinary, replaceOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js"
 const cookieOptions = {
     httpOnly : true,
@@ -104,10 +105,6 @@ const login = asyncHandler(async (req, res)=>{
         throw new ApiError(400, "Wrong Credentials")
     const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
 
-    const options = {
-        httpOnly : true,
-        secure : true,
-    }
     res.cookie("accessToken", accessToken, cookieOptions).cookie("refreshToken", refreshToken, cookieOptions)
     return success(res, 200, "Login Successfull", {id:user._id, accessToken, refreshToken})
 })
@@ -278,6 +275,18 @@ const deleteProfilePicture = asyncHandler (async(req, res)=>{
     return success(res, 200, "Profile Picture Deleted")
 })
 
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const token = req.cookies?.refreshToken || req?.headers?.authorization?.split(' ')[1]
+    if(!token)
+        throw new ApiError(401, "Token not found")
+    const data = jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET)
+    if(!data || !data._id)
+        throw new ApiError(401, "User Not Authorized")
+    const user = await User.findById(data._id)
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
+    res.cookie("accessToken", accessToken, cookieOptions).cookie("refreshToken", refreshToken, cookieOptions)
+    return success(res, 200, "Token Refreshed", {id:user._id, accessToken, refreshToken})
+})
 export {
     register,
     login,
@@ -292,6 +301,7 @@ export {
     deleteAccount,
     deleteProfilePicture,
     me,
+    refreshAccessToken,
 }
 
 
