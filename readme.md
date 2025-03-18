@@ -184,5 +184,10 @@ https://localhost:3002/api/v1/user/
 }
 ```
 
+### **15. Refresh Access Token**
+**POST** `/refresh-access-token`
+---
+Description: Generate new access and refresh tokens and save them in cookies.
+---
 feel free to reach out! 🚀
 
